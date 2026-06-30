@@ -12,6 +12,20 @@ services:
     volumes:
       - ./:/var/www
 
+    # Inside the container, the database is the `postgres` service (not 127.0.0.1).
+    # These real env vars override the matching values in .env for the container only,
+    # so host-based `php artisan serve` keeps using the .env settings.
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: laravel
+      DB_USERNAME: laravel
+      DB_PASSWORD: secret
+
+    depends_on:
+      - postgres
+
   nginx:
     image: nginx:latest
 
